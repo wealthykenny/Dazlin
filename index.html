@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Daz-Lin Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.puter.com/v2/"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        darkBg: '#0b0f19',
+                        panelBg: '#111827',
+                        primaryLime: '#84cc16', // Lime-500
+                        limeLight: '#a3e635', // Lime-400
+                        limeDark: '#4d7c0f', // Lime-700
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Sleek scrollbar hiding for mobile app feel */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        body { background-color: #000; display: flex; justify-content: center; }
+        #app-container { box-shadow: 0 0 40px rgba(132, 204, 22, 0.1); }
+    </style>
+</head>
+<body class="text-gray-100 font-sans h-screen w-full">
+
+    <div id="app-container" class="w-full max-w-md h-full bg-darkBg relative overflow-hidden flex flex-col">
+
+        <div id="view-login" class="absolute inset-0 z-50 bg-darkBg flex flex-col justify-center items-center px-6 transition-transform duration-300">
+            <div class="mb-12 text-center">
+                <div class="w-24 h-24 bg-gradient-to-br from-limeLight to-primaryLime rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-[0_0_30px_rgba(132,204,22,0.3)] transform rotate-3">
+                    <svg class="w-12 h-12 text-darkBg transform -rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                </div>
+                <h1 class="text-4xl font-bold tracking-tight text-white mb-2">Daz-Lin</h1>
+                <p class="text-gray-400">Connect, Create, Chat.</p>
+            </div>
+
+            <div class="w-full space-y-4">
+                <button onclick="switchView('view-chats')" class="w-full py-3.5 bg-white text-gray-900 rounded-full font-semibold flex items-center justify-center space-x-3 hover:bg-gray-100 transition">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    <span>Continue with Google</span>
+                </button>
+                <button onclick="switchView('view-chats')" class="w-full py-3.5 bg-panelBg border border-gray-700 text-white rounded-full font-semibold flex items-center justify-center space-x-3 hover:bg-gray-800 transition">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    <span>Email Sign Up / In</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="view-chats" class="hidden absolute inset-0 z-40 bg-darkBg flex flex-col transition-transform duration-300">
+            <div class="px-5 pt-12 pb-4 bg-darkBg flex justify-between items-center sticky top-0 z-10">
+                <h2 class="text-2xl font-bold text-white">Daz-Lin</h2>
+                <div class="flex space-x-4 text-gray-400">
+                    <svg class="w-6 h-6 hover:text-limeLight" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <svg class="w-6 h-6 hover:text-limeLight" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+            </div>
+
+            <div class="px-2 py-2 overflow-x-auto no-scrollbar whitespace-nowrap border-b border-gray-800">
+                <div class="inline-block px-3 text-center cursor-pointer">
+                    <div class="w-14 h-14 rounded-full bg-gray-800 border-2 border-dashed border-gray-600 flex items-center justify-center mb-1 relative">
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    </div>
+                    <span class="text-xs text-gray-400">Add</span>
+                </div>
+                <div class="inline-block px-3 text-center cursor-pointer">
+                    <div class="w-14 h-14 rounded-full border-2 border-primaryLime p-0.5 mb-1">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Claude" class="w-full h-full rounded-full bg-panelBg" alt="Claude">
+                    </div>
+                    <span class="text-xs text-gray-300">Claude4.7</span>
+                </div>
+                 <div class="inline-block px-3 text-center cursor-pointer">
+                    <div class="w-14 h-14 rounded-full border-2 border-primaryLime p-0.5 mb-1">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mia" class="w-full h-full rounded-full bg-panelBg" alt="Mia">
+                    </div>
+                    <span class="text-xs text-gray-300">Mia 🌺</span>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto no-scrollbar pb-20">
+                <div onclick="switchView('view-thread')" class="flex items-center px-5 py-4 hover:bg-panelBg cursor-pointer transition">
+                    <div class="relative">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Claude" class="w-12 h-12 rounded-full bg-panelBg object-cover">
+                        <div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-primaryLime border-2 border-darkBg rounded-full"></div>
+                    </div>
+                    <div class="ml-4 flex-1 border-b border-gray-800 pb-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <h3 class="font-semibold text-white">Claude 4.7 🤖</h3>
+                            <span class="text-xs text-primaryLime font-medium">Just now</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-gray-400 truncate w-48">I'm ready via Puter.js! How can I help?</p>
+                            <div class="w-5 h-5 bg-primaryLime rounded-full flex items-center justify-center">
+                                <span class="text-xs text-darkBg font-bold">1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center px-5 py-4 hover:bg-panelBg cursor-pointer transition">
+                    <div class="relative">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" class="w-12 h-12 rounded-full bg-panelBg object-cover">
+                    </div>
+                    <div class="ml-4 flex-1 border-b border-gray-800 pb-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <h3 class="font-semibold text-white">Alex Dev</h3>
+                            <span class="text-xs text-gray-500">Yesterday</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-gray-500 truncate w-48">Did you push the R2 bucket config?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="absolute bottom-24 right-5 w-14 h-14 bg-primaryLime rounded-2xl flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-0 transition">
+                <svg class="w-6 h-6 text-darkBg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            </button>
+
+            <div class="absolute bottom-0 w-full h-16 bg-panelBg border-t border-gray-800 flex justify-around items-center px-2 pb-2">
+                <div class="flex flex-col items-center justify-center w-16 h-full text-primaryLime cursor-pointer">
+                    <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"></path></svg>
+                    <span class="text-[10px] font-medium">Chats</span>
+                </div>
+                <div class="flex flex-col items-center justify-center w-16 h-full text-gray-500 hover:text-gray-300 cursor-pointer">
+                    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="text-[10px]">Updates</span>
+                </div>
+                <div class="flex flex-col items-center justify-center w-16 h-full text-gray-500 hover:text-gray-300 cursor-pointer">
+                    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <span class="text-[10px]">Community</span>
+                </div>
+                <div class="flex flex-col items-center justify-center w-16 h-full text-gray-500 hover:text-gray-300 cursor-pointer">
+                    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span class="text-[10px]">Settings</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-thread" class="hidden absolute inset-0 z-50 bg-darkBg flex flex-col transition-transform duration-300 transform translate-x-full">
+            <div class="px-4 pt-12 pb-3 bg-panelBg flex items-center border-b border-gray-800 shadow-sm">
+                <button onclick="switchView('view-chats')" class="mr-3 text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Claude" class="w-10 h-10 rounded-full bg-darkBg mr-3">
+                <div class="flex-1">
+                    <h3 class="font-semibold text-white text-sm">Claude 4.7 <span class="text-[10px] bg-gray-800 px-2 py-0.5 rounded text-gray-400 ml-1">Puter.js</span></h3>
+                    <p class="text-xs text-primaryLime">Online</p>
+                </div>
+                <div class="flex space-x-3 text-gray-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-darkBg">
+                <div class="flex items-start">
+                    <div class="bg-panelBg text-gray-200 rounded-2xl rounded-tl-sm px-4 py-2 max-w-[80%] text-sm border border-gray-800">
+                        Hello! I am Claude 4.7, running natively in your browser via puter.js. How can I assist you with your Dart/Flutter-style UI today?
+                    </div>
+                </div>
+                <div class="flex items-start justify-end">
+                    <div class="bg-primaryLime text-darkBg font-medium rounded-2xl rounded-tr-sm px-4 py-2 max-w-[80%] text-sm">
+                        I need to configure my Neon database and Cloudflare R2 bucket.
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 bg-panelBg border-t border-gray-800 flex items-center space-x-2">
+                <button class="text-gray-400 p-2 rounded-full hover:bg-gray-800">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                </button>
+                <div class="flex-1 bg-darkBg rounded-full flex items-center px-4 py-2 border border-gray-700">
+                    <input type="text" placeholder="Message Claude..." class="bg-transparent w-full focus:outline-none text-white text-sm">
+                    <button class="text-gray-400 ml-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                    </button>
+                </div>
+                <button class="w-10 h-10 bg-primaryLime rounded-full flex items-center justify-center text-darkBg shadow-md">
+                    <svg class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchView(viewId) {
+            // Hide all views
+            document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('view-chats').classList.add('hidden');
+            
+            // Handle Thread Sliding Animation specifically
+            const threadView = document.getElementById('view-thread');
+            if (viewId === 'view-thread') {
+                threadView.classList.remove('hidden');
+                setTimeout(() => threadView.classList.remove('translate-x-full'), 10);
+            } else {
+                threadView.classList.add('translate-x-full');
+                setTimeout(() => threadView.classList.add('hidden'), 300);
+                
+                // Show target view
+                document.getElementById(viewId).classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
